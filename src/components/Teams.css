@@ -1,0 +1,19 @@
+.teams {
+    max-width: 1100px;
+}
+
+.teams button {
+    padding: 8px 16px;
+}
+
+.users button:hover {
+    background-color: #1d4ed8
+}
+
+.search {
+    margin: 16px 0;
+}
+
+.search input {
+    padding: 8px;
+}
