@@ -65,10 +65,8 @@ const Teams = () => {
         <div className="Teams">
             <h1>Teams</h1>
 
-            {}
             <button onClick={fetchTeams}>Get Teams</button>
 
-            {}
             <div className="search">
                 <input
                     type="text"
@@ -79,7 +77,6 @@ const Teams = () => {
                 <button onClick={searchTeam}>Search</button>
             </div>
 
-            {}
             {message && <p className="message">{message}</p>}
 
             {foundTeams.length > 0 && (
@@ -93,7 +90,6 @@ const Teams = () => {
                 </div>
             )}
 
-            {}
             {teams.length > 0 && (
                 <div>
                     <h2>All Teams ({teams.length})</h2>

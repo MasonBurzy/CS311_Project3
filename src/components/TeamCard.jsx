@@ -3,9 +3,8 @@ import React from "react";
 const TeamCard = ({ team }) => {
     return (
         <div className="team-card">
-            <img
+            <img 
                 src={`https://www.mlbstatic.com/team-logos/${team.id}.svg`}
-                alt={`${team.name} logo`}
             />
 
             <h3>{team.name}</h3>
