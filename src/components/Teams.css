@@ -1,9 +1,21 @@
+.root {
+    --background-color: #ffffff
+    --accent-color: #002D72;
+    --accent-color-hover: #012255;
+    --secondary-accent-color: #D50032;
+}
+
 .teams {
     max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .teams button {
     padding: 8px 16px;
+    font-size: 1rem
+    var(--background-color)
 }
 
 .users button:hover {
@@ -16,4 +28,15 @@
 
 .search input {
     padding: 8px;
+}
+
+.team-card {
+    text-align: center;
+}
+
+.team-card img {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    margin-bottom: 10px;
 }
