@@ -6,10 +6,11 @@ const API_URL = "https://statsapi.mlb.com/api/v1/teams?sportId=1";
 
 const Teams = () => {
     const [teams, setTeams] = useState([]);
-
     const [searchTerm, setSearchTerm] = useState("");
     const [foundTeams, setFoundTeams] = useState([]);
     const [message, setMessage] = useState("");
+    const [filter, setFilter] = useState("All")
+    const [activeFilter, setActiveFilter] = useState("All");
 
     const fetchTeams = async () => {
         try {
@@ -17,6 +18,7 @@ const Teams = () => {
             const data = await response.json();
 
             console.log(data);
+            console.log([...new Set(data.teams.map((team) => team.league.name))]);
 
             if (data.teams) {
                 setTeams(data.teams);
@@ -30,6 +32,11 @@ const Teams = () => {
         fetchTeams();
     }, []);
 
+    const filteredTeams = teams.filter((team) => {
+        if (filter === "All") return true;
+        return team.league.name === filter;
+    }) 
+
     const searchTeam = async () => {
         const term = searchTerm.trim().toLowerCase();
 
@@ -39,25 +46,16 @@ const Teams = () => {
             return;
         }
 
-        try {
-            const response = await fetch(API_URL);
-            const data = await response.json();
+        const matches = filteredTeams.filter((team) =>
+        team.name.toLowerCase().includes(term)
+        );
 
-            const matches = data.results.filter((team) => {
-                const fullName = `${team.name.first} ${team.name.last}`.toLowerCase();
-                return fullName.includes(term);
-            });
+        setFoundTeams(matches);
 
-            setFoundTeams(matches);
-
-            if (matches.length === 0) {
-                setMessage(`No team found named "${searchTerm}".`);
-            } else {
-                setMessage("");
-            }
-        } catch (error) {
-            console.log(`Error: ${error}`);
-            setMessage("Something went wrong. Please try again.");
+        if (matches.length === 0) {
+            setMessage(`No team found named "${searchTerm}".`);
+        } else {
+            setMessage("");
         }
     };
 
@@ -65,9 +63,23 @@ const Teams = () => {
         <div className="Teams">
             <h1>Teams</h1>
 
-            <button onClick={fetchTeams}>Get Teams</button>
+            {/* Division drop-down menu & functionality */}
+            <select className="division-menu"
+                name="league"
+                id="league-select"
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                >
+                <option value="All">All Divisions</option>
+                <option value="American League">American League</option>
+                <option value="National League">National League</option>
+            </select>
 
-            <div className="search">
+            {/* "Search" button */}
+            <form className="search" onSubmit={(e) => {
+                e.preventDefault();
+
+            }}>
                 <input
                     type="text"
                     placeholder="Search by name"
@@ -75,15 +87,15 @@ const Teams = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
                 <button onClick={searchTeam}>Search</button>
-            </div>
+            </form>
 
             {message && <p className="message">{message}</p>}
 
             {foundTeams.length > 0 && (
                 <div>
                     <h2>Search Result</h2>
-                    <div className="user-list">
-                        {foundTeams.map((user) => (
+                    <div className="container">
+                        {foundTeams.map((team) => (
                             <TeamCard key={team.id} team={team} />
                         ))}
                     </div>
@@ -93,8 +105,8 @@ const Teams = () => {
             {teams.length > 0 && (
                 <div>
                     <h2>All Teams ({teams.length})</h2>
-                    <div className="team-list">
-                        {teams.map((team) => (
+                    <div className="container">
+                        {filteredTeams.map((team) => (
                             <TeamCard key={team.id} team={team} />
                         ))}
                     </div>
